@@ -33,21 +33,35 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 # We support both `get_tools()` presence and direct imports for robustness.
 search_documentation = None
 check_api_status = None
+create_project = None
+add_cost_item = None
 try:
     from src.tools import get_tools  # if available
     tools_list = get_tools()
     # Expect tools named exactly as in your tools.py
     for t in tools_list:
-        if getattr(t, "name", "") == "search_documentation":
+        tname = getattr(t, "name", "")
+        if tname == "search_documentation":
             search_documentation = t
-        if getattr(t, "name", "") == "check_api_status":
+        if tname == "check_api_status":
             check_api_status = t
+        if tname == "create_project":
+            create_project = t
+        if tname == "add_cost_item":
+            add_cost_item = t
     print("src.tools loaded via get_tools().")
 except Exception as e:
     try:
-        from src.tools import search_documentation as _sd, check_api_status as _hc
+        from src.tools import (
+            search_documentation as _sd,
+            check_api_status as _hc,
+            create_project as _cp,
+            add_cost_item as _aci,
+        )
         search_documentation = _sd
         check_api_status = _hc
+        create_project = _cp
+        add_cost_item = _aci
         print("src.tools loaded via direct imports.")
     except Exception as e2:
         print(f"WARNING: could not import tools: {e2}")
@@ -217,6 +231,57 @@ def executor_node(state: AgentState) -> AgentState:
             state["docs"] = [results]
         else:
             state["docs"] = [{"message": str(results)}]
+
+        # Execute real actions for the specific workflow (Block 7)
+        uq = query.lower()
+        if (
+            ("create a project" in uq and "cost" in uq)
+            and create_project is not None
+            and add_cost_item is not None
+        ):
+            try:
+                adapter = choose_api_for_query(query)
+            except Exception:
+                adapter = None
+            if adapter is not None:
+                # Optional health check before performing actions
+                try:
+                    _ = check_api_status.invoke({"base_url": adapter.base_url}) if check_api_status else None
+                except Exception:
+                    pass
+
+                project_payload = {"projectName": "New Site Development", "clientId": "CUST-456"}
+                cp = create_project.invoke({
+                    "payload": project_payload,
+                    "base_url": adapter.base_url,
+                    "headers": adapter.auth_headers() if hasattr(adapter, "auth_headers") else {},
+                    "timeout": 10,
+                })
+
+                project_id = None
+                if isinstance(cp, dict) and cp.get("ok") and isinstance(cp.get("data"), dict):
+                    data = cp["data"]
+                    project_id = data.get("projectId") or data.get("id")
+
+                cost_results = []
+                if project_id:
+                    items = [
+                        {"itemCode": "LAB-ELEC-01", "description": "Electrician Hourly Rate", "quantity": 8, "unitCost": 65},
+                        {"itemCode": "MAT-CONC-2Y", "description": "Concrete (2yd)", "quantity": 1, "unitCost": 240},
+                    ]
+                    for item in items:
+                        res = add_cost_item.invoke({
+                            "project_id": project_id,
+                            "item": item,
+                            "base_url": adapter.base_url,
+                            "headers": adapter.auth_headers() if hasattr(adapter, "auth_headers") else {},
+                            "timeout": 10,
+                        })
+                        cost_results.append(res)
+
+                state["created_project"] = cp
+                state["project_id"] = project_id
+                state["added_items"] = cost_results
     except Exception as e:
         print(f"Executor error: {e}")
         state["docs"] = [{"error": str(e)}]
@@ -288,6 +353,26 @@ def synthesizer_node(state: AgentState) -> AgentState:
             f"Placeholder synthesized response for query: '{query}'. "
             f"(LLM error: {e})"
         )
+
+    # Append execution results if present
+    try:
+        pid = state.get("project_id")
+        if pid:
+            added = state.get("added_items") or []
+            exec_lines = ["Execution Results:", f"- Created projectId: {pid}"]
+            try:
+                summaries = []
+                for r in added:
+                    if isinstance(r, dict) and r.get("ok") and isinstance(r.get("data"), dict):
+                        summaries.append(json.dumps(r["data"], ensure_ascii=False))
+                if summaries:
+                    exec_lines.append("- Add cost items responses: " + "; ".join(summaries))
+            except Exception:
+                pass
+            exec_block = "\n".join(exec_lines)
+            answer = exec_block + "\n\n" + (answer or "")
+    except Exception:
+        pass
 
     # Add a short source list for the Streamlit/UI side
     answer += _render_sources(docs)
@@ -372,6 +457,15 @@ def run_once(app, query: str):
     print("API Status:", final.get("api_status"))
     print("Retrieved Docs:", bool(final.get("docs")))
     print("Plan Generated:", bool(final.get("plan")))
+    # Execution summary (if any)
+    pid = final.get("project_id")
+    if pid:
+        added = final.get("added_items") or []
+        try:
+            print("Execution: project_id:", pid)
+            print("Execution: cost items added:", len(added))
+        except Exception:
+            pass
     ans = final.get("answer") or ""
     snippet = ans if len(ans) < 800 else ans[:800]
     print("\n--- Final Response (truncated) ---")

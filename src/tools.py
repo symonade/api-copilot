@@ -78,7 +78,7 @@ def search_documentation(query: str, k: int = 4, api_hint: str = "") -> List[Dic
         return [{"error": "Vector store not initialized. Run ingestion first."}]
 
     console.rule("[bold blue]RAG Search Initiated[/bold blue]")
-    console.log(f"[{datetime.now().strftime('%H:%M:%S')}] 🔍 Query: [cyan]{query}[/cyan]")
+    console.log(f"🔍 Query: [cyan]{query}[/cyan]")
 
     try:
         results = vector_store.similarity_search_with_relevance_scores(query, k=k)
@@ -209,3 +209,142 @@ available_tools = [search_documentation, check_api_status]
 
 def get_tools():
     return available_tools
+
+# --- New: Real API tools (Block 7) ---
+from typing import Optional
+
+
+@tool
+def create_project(payload: Dict[str, Any], base_url: str, headers: Optional[Dict[str, str]] = None, timeout: int = 10) -> Dict[str, Any]:
+    """
+    Create a new project via POST {base_url}/projects.
+    Returns: { ok: bool, data?: dict, status_code?: int, error?: str }
+    """
+    def _ensure_auth(h: Optional[Dict[str, str]], base: str) -> Dict[str, str]:
+        out = dict(h or {})
+        # If only X-API-Key is provided, mirror it as Bearer for mock compatibility
+        if "Authorization" not in out:
+            api_key = out.get("X-API-Key") or out.get("x-api-key")
+            if api_key:
+                out["Authorization"] = f"Bearer {api_key}"
+            elif base.startswith("http://localhost:8000") or base.startswith("https://localhost:8000"):
+                # Mock API accepts any Bearer token
+                out["Authorization"] = "Bearer dev"
+        return out
+
+    def _coerce_project_payload(p: Dict[str, Any]) -> Dict[str, Any]:
+        name = p.get("name") or p.get("projectName") or "New Project"
+        description = p.get("description")
+        out: Dict[str, Any] = {"name": name}
+        if description:
+            out["description"] = description
+        return out
+
+    url = base_url.rstrip("/") + "/projects"
+    console.rule("[bold blue]Create Project[/bold blue]")
+    console.log(f"POST {url}")
+    try:
+        payload = _coerce_project_payload(payload or {})
+        send_headers = _ensure_auth(headers, base_url)
+        resp = requests.post(url, json=payload, headers=send_headers, timeout=timeout)
+        console.log(f"[green]→ Status: {resp.status_code}[/green]")
+        try:
+            resp.raise_for_status()
+        except requests.exceptions.HTTPError as e:
+            # If API expects Bearer and we sent X-API-Key, retry with Bearer using same key
+            try:
+                h = headers or {}
+                api_key = h.get("X-API-Key") or h.get("x-api-key")
+                if resp.status_code == 401 and api_key:
+                    retry_headers = dict(h)
+                    retry_headers.pop("X-API-Key", None)
+                    retry_headers.pop("x-api-key", None)
+                    retry_headers["Authorization"] = f"Bearer {api_key}"
+                    console.log("[yellow]⚠️ 401 Unauthorized; retrying with Bearer token header...[/yellow]")
+                    resp = requests.post(url, json=payload, headers=retry_headers, timeout=timeout)
+                    resp.raise_for_status()
+                else:
+                    raise
+            except Exception:
+                raise
+        data = resp.json()
+        console.log(f"→ Response: {data}")
+        return {"ok": True, "data": data, "status_code": int(resp.status_code)}
+    except requests.exceptions.RequestException as e:
+        console.log(f"[red]Create project failed:[/red] {e}")
+        return {"ok": False, "error": str(e)}
+
+
+@tool
+def add_cost_item(project_id: str, item: Dict[str, Any], base_url: str, headers: Optional[Dict[str, str]] = None, timeout: int = 10) -> Dict[str, Any]:
+    """
+    Add a cost item via POST {base_url}/projects/{project_id}/cost-items.
+    Returns: { ok: bool, data?: dict, status_code?: int, error?: str }
+    """
+    def _ensure_auth(h: Optional[Dict[str, str]], base: str) -> Dict[str, str]:
+        out = dict(h or {})
+        if "Authorization" not in out:
+            api_key = out.get("X-API-Key") or out.get("x-api-key")
+            if api_key:
+                out["Authorization"] = f"Bearer {api_key}"
+            elif base.startswith("http://localhost:8000") or base.startswith("https://localhost:8000"):
+                out["Authorization"] = "Bearer dev"
+        return out
+
+    def _coerce_cost_payload(it: Dict[str, Any]) -> Dict[str, Any]:
+        # Mock expects {"items": [{"code": str, "amount": float}]}
+        code = it.get("code") or it.get("itemCode") or "ITEM"
+        amount: Optional[float] = None
+        if "amount" in it:
+            try:
+                amount = float(it.get("amount") or 0)
+            except Exception:
+                amount = None
+        if amount is None:
+            q = it.get("quantity") or it.get("qty")
+            u = it.get("unitCost") or it.get("unit_cost") or it.get("unit")
+            try:
+                if q is not None and u is not None:
+                    amount = float(q) * float(u)
+            except Exception:
+                amount = None
+        if amount is None:
+            amount = 0.0
+        return {"items": [{"code": code, "amount": float(amount)}]}
+
+    path = f"/projects/{project_id}/cost-items"
+    url = base_url.rstrip("/") + path
+    console.rule("[bold blue]Add Cost Item[/bold blue]")
+    console.log(f"POST {url}")
+    try:
+        send_item = _coerce_cost_payload(item or {})
+        send_headers = _ensure_auth(headers, base_url)
+        resp = requests.post(url, json=send_item, headers=send_headers, timeout=timeout)
+        console.log(f"[green]→ Status: {resp.status_code}[/green]")
+        try:
+            resp.raise_for_status()
+        except requests.exceptions.HTTPError as e:
+            try:
+                h = headers or {}
+                api_key = h.get("X-API-Key") or h.get("x-api-key")
+                if resp.status_code == 401 and api_key:
+                    retry_headers = dict(h)
+                    retry_headers.pop("X-API-Key", None)
+                    retry_headers.pop("x-api-key", None)
+                    retry_headers["Authorization"] = f"Bearer {api_key}"
+                    console.log("[yellow]⚠️ 401 Unauthorized; retrying with Bearer token header...[/yellow]")
+                    resp = requests.post(url, json=send_item, headers=retry_headers, timeout=timeout)
+                    resp.raise_for_status()
+                else:
+                    raise
+            except Exception:
+                raise
+        data = resp.json()
+        console.log(f"→ Response: {data}")
+        return {"ok": True, "data": data, "status_code": int(resp.status_code)}
+    except requests.exceptions.RequestException as e:
+        console.log(f"[red]Add cost item failed:[/red] {e}")
+        return {"ok": False, "error": str(e)}
+
+# extend available tools
+available_tools = [search_documentation, check_api_status, create_project, add_cost_item]
