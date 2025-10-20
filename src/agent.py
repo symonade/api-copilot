@@ -111,6 +111,10 @@ class AgentState(TypedDict, total=False):
     pm_score: Dict[str, Any]
     route: str
     events: List[str]
+    # Block 7 execution results
+    created_project: Dict[str, Any]
+    project_id: str
+    added_items: List[Dict[str, Any]]
 
 def _append_event(state: AgentState, name: str) -> None:
     if "events" not in state or not isinstance(state["events"], list):
