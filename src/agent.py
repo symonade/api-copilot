@@ -67,7 +67,7 @@ except Exception as e:
         print(f"WARNING: could not import tools: {e2}")
 
 if search_documentation is None or check_api_status is None:
-    print("WARNING: Tools missing — RAG and health checks will be skipped.")
+    print("WARNING: One or more tools are missing; RAG and health checks will be skipped.")
 
 # --- API registry and selection ----------------------------------------------
 from src.apis import ApiRegistry, ContechApi, SchedulerApi
@@ -78,7 +78,7 @@ API_REGISTRY.register(SchedulerApi())
 
 def choose_api_for_query(user_query: str):
     adapter = API_REGISTRY.select_for_query(user_query)
-    print(f"[Router] Selected API ? {adapter.name} ({adapter.base_url})")
+    print(f"[Router] Selected API -> {adapter.name} ({adapter.base_url})")
     return adapter
 
 # --- Safe LLM init with fallback ----------------------------------------------
@@ -129,7 +129,8 @@ def health_check_node(state: AgentState) -> AgentState:
     query = (state.get("user_query") or "").lower()
 
     # Heuristic: run health check for status/5xx keywords
-    should_check = any(k in query for k in ["status", "503", "502", "500", "timeout", "down", "health"])
+    should_check = any(k in query for k in ["status", "503", "502", "500", "timeout", "down", "health"]) or \
+                   any(k in query for k in ["schedule", "calendar", "timeline", "deadline"])
     if not should_check:
         state["api_status"] = {"status": "skipped"}
         return state
@@ -494,4 +495,6 @@ if __name__ == "__main__":
             run_once(app, q)
         except Exception as e:
             print(f"\n[ERROR] while running '{q}': {e}\n")
+
+
 
