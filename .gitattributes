@@ -1,0 +1,31 @@
+# Normalize line endings across platforms
+# Store LF in the repo; allow platform-appropriate checkouts
+* text=auto
+
+# Prefer LF for source and config files
+*.py   text eol=lf
+*.md   text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.toml text eol=lf
+*.sh   text eol=lf
+
+# Windows-native scripts keep CRLF for best compatibility
+*.ps1  text eol=crlf
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+
+# Treat known binary files as binary to avoid EOL conversion
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.bin   binary
+*.sqlite3 binary
+
+# ChromaDB artifacts
+chroma_db/**/data_level0.bin binary
+chroma_db/**/header.bin      binary
+chroma_db/**/length.bin      binary
+chroma_db/**/link_lists.bin  binary
