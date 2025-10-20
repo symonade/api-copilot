@@ -55,6 +55,18 @@ except Exception as e:
 if search_documentation is None or check_api_status is None:
     print("WARNING: Tools missing — RAG and health checks will be skipped.")
 
+# --- API registry and selection ----------------------------------------------
+from src.apis import ApiRegistry, ContechApi, SchedulerApi
+
+API_REGISTRY = ApiRegistry()
+API_REGISTRY.register(ContechApi())
+API_REGISTRY.register(SchedulerApi())
+
+def choose_api_for_query(user_query: str):
+    adapter = API_REGISTRY.select_for_query(user_query)
+    print(f"[Router] Selected API → {adapter.name} ({adapter.base_url})")
+    return adapter
+
 # --- Safe LLM init with fallback ----------------------------------------------
 def _init_llm(model_name: str) -> ChatGoogleGenerativeAI:
     print(f"Attempting to initialize LLM with model: {model_name}")
@@ -109,9 +121,11 @@ def health_check_node(state: AgentState) -> AgentState:
         return state
 
     try:
-        print(f"Performing API health check using tool... base_url={API_BASE_URL}")
+        adapter = choose_api_for_query(query)
+        state["selected_api"] = {"name": adapter.name, "base_url": adapter.base_url}
+        print(f"Performing API health check using tool... base_url={adapter.base_url}")
         # IMPORTANT: call tools via .invoke({...})
-        resp = check_api_status.invoke({"base_url": API_BASE_URL})
+        resp = check_api_status.invoke({"base_url": adapter.base_url})
         # Some tool wrappers return strings; normalise to dict
         state["api_status"] = resp if isinstance(resp, dict) else {"status": "unknown", "raw": str(resp)}
     except Exception as e:
@@ -125,6 +139,15 @@ def router_node(state: AgentState) -> AgentState:
     _append_event(state, "router")
     q = (state.get("user_query") or "").lower()
     api_status = (state.get("api_status") or {}).get("status", "skipped")
+
+    # Log selected API when routing (if not already logged in health check)
+    try:
+        sel = state.get("selected_api")
+        if not sel:
+            adapter = choose_api_for_query(q)
+            state["selected_api"] = {"name": adapter.name, "base_url": adapter.base_url}
+    except Exception:
+        pass
 
     # If user asks status and we have a known status -> synthesizer
     if "status" in q and api_status in {"Operational", "Unavailable", "Unreachable", "error"}:
@@ -174,11 +197,19 @@ def executor_node(state: AgentState) -> AgentState:
         return state
 
     query = state.get("user_query") or ""
+    # Derive API hint from selection
+    api_hint = ""
+    sel = state.get("selected_api") or {}
+    if isinstance(sel, dict):
+        api_hint = sel.get("name") or ""
     try:
         print("\n--- Running RAG Search ---")
         print(f"Query: {query}")
         # IMPORTANT: call tools via .invoke({...})
-        results = search_documentation.invoke({"query": query, "k": 4})
+        payload = {"query": query, "k": 4}
+        if api_hint:
+            payload["api_hint"] = api_hint
+        results = search_documentation.invoke(payload)
         # Normalise return to a list of dicts
         if isinstance(results, list):
             state["docs"] = results

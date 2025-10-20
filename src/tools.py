@@ -4,6 +4,7 @@ import requests
 from typing import List, Dict, Any, Optional
 from dotenv import load_dotenv
 from langchain.tools import tool
+from datetime import datetime
 
 # --- Rich (color logs) with safe fallback ---
 try:
@@ -68,7 +69,7 @@ else:
 
 # --- RAG Tool: Documentation Search ---
 @tool
-def search_documentation(query: str, k: int = 4) -> List[Dict[str, Any]]:
+def search_documentation(query: str, k: int = 4, api_hint: str = "") -> List[Dict[str, Any]]:
     """
     Searches the ConTech API documentation for the most relevant context.
     Returns the top-k results with relevance scores and metadata.
@@ -77,20 +78,26 @@ def search_documentation(query: str, k: int = 4) -> List[Dict[str, Any]]:
         return [{"error": "Vector store not initialized. Run ingestion first."}]
 
     console.rule("[bold blue]RAG Search Initiated[/bold blue]")
-    console.log(f"🔍 Query: [cyan]{query}[/cyan]")
+    console.log(f"[{datetime.now().strftime('%H:%M:%S')}] 🔍 Query: [cyan]{query}[/cyan]")
 
     try:
         results = vector_store.similarity_search_with_relevance_scores(query, k=k)
         console.log(f"[green]Found {len(results)} results.[/green]")
 
-        formatted_results = [
-            {
-                "page_content": doc.page_content,
-                "metadata": doc.metadata,
-                "relevance_score": float(round(float(score), 3)),
-            }
-            for doc, score in results
-        ]
+        formatted_results: List[Dict[str, Any]] = []
+        for doc, score in results:
+            # Apply soft filter by api_hint if provided and metadata has a 'source'
+            if api_hint and isinstance(doc.metadata, dict):
+                src = str(doc.metadata.get("source") or "").lower()
+                if api_hint.lower() not in src:
+                    continue
+            formatted_results.append(
+                {
+                    "page_content": doc.page_content,
+                    "metadata": doc.metadata,
+                    "relevance_score": float(round(float(score), 3)),
+                }
+            )
 
         if not formatted_results:
             console.log("[yellow]No relevant results found.[/yellow]")
