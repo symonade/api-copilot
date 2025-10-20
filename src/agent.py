@@ -485,6 +485,7 @@ if __name__ == "__main__":
         "What is the API status?",
         "How do I authenticate to the API?",
         "Create a project and add some cost items.",
+        "Show schedule timeline for project PROJ-ABC123",
         "Hello there!",
         "My API calls are failing with 503 errors.",
     ]
