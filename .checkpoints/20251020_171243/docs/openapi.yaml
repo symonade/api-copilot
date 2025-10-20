@@ -1,0 +1,211 @@
+openapi: 3.0.0
+info:
+  title: Expanded ConTech API
+  version: "1.1.0"
+  description: An expanded API for managing construction projects, costs, schedules, and resources.
+paths:
+  /projects:
+    get:
+      summary: List all projects
+      description: Retrieves a list of all active construction projects.
+      responses:
+        '200':
+          description: A list of projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    projectId:
+                      type: string
+                      example: "PROJ-XYZ789"
+                    projectName:
+                      type: string
+                      example: "Downtown Tower Renovation"
+                    clientId:
+                      type: string
+                      example: "CLIENT-123"
+    post:
+      summary: Create a new project
+      description: Creates a new project entry in the system. Requires project name and client ID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                projectName:
+                  type: string
+                  example: "Downtown Tower Renovation"
+                clientId:
+                  type: string
+                  example: "CLIENT-123"
+              required:
+                - projectName
+                - clientId
+      responses:
+        '201':
+          description: Project created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  projectId:
+                    type: string
+                    example: "PROJ-XYZ789"
+                  status:
+                    type: string
+                    example: "Created"
+        '400':
+          description: Bad Request (e.g., missing required fields)
+
+  /projects/{projectId}:
+    get:
+      summary: Get project details by ID
+      description: Retrieves detailed information for a specific project.
+      parameters:
+        - in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          description: The ID of the project to retrieve.
+      responses:
+        '200':
+          description: Project details
+        '404':
+          description: Project not found
+
+  /projects/{projectId}/cost-items:
+    post:
+      summary: Add a cost item to a project
+      description: Links a new cost item (like materials or labor) to an existing project.
+      parameters:
+        - in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          description: The ID of the project to add the cost item to.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                itemCode:
+                  type: string
+                  example: "MAT-STL-001"
+                description:
+                  type: string
+                  example: "Structural Steel Beam"
+                quantity:
+                  type: number
+                  format: float
+                  example: 15.5
+                unitCost:
+                  type: number
+                  format: double
+                  example: 1250.75
+              required:
+                - itemCode
+                - description
+                - quantity
+                - unitCost
+      responses:
+        '201':
+          description: Cost item added
+        '404':
+          description: Project not found
+
+  /projects/{projectId}/schedule-tasks:
+    post:
+      summary: Add a task to a project schedule
+      description: Adds a new task to an existing project's schedule.
+      parameters:
+        - in: path
+          name: projectId
+          required: true
+          schema:
+            type: string
+          description: The ID of the project to add the task to.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                taskName:
+                  type: string
+                  example: "Foundation Pour"
+                startDate:
+                  type: string
+                  format: date
+                  example: "2024-07-20"
+                endDate:
+                  type: string
+                  format: date
+                  example: "2024-07-25"
+                assignedResource:
+                  type: string
+                  example: "Crew A"
+              required:
+                - taskName
+                - startDate
+                - endDate
+      responses:
+        '201':
+          description: Task added to schedule
+        '404':
+          description: Project not found
+
+  /resources:
+    get:
+      summary: List available resources
+      description: Retrieves a list of all available construction resources (e.g., crews, equipment).
+      responses:
+        '200':
+          description: A list of resources
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    resourceId:
+                      type: string
+                      example: "RES-CRW-001"
+                    resourceName:
+                      type: string
+                      example: "Framing Crew 1"
+                    type:
+                      type: string
+                      example: "Crew"
+                    availability:
+                      type: string
+                      example: "Available"
+
+  /status:
+    get:
+      summary: Check API Health Status
+      description: A simple endpoint to verify the API service is operational.
+      responses:
+        '200':
+          description: Service is operational
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "OK"
+        '503':
+          description: Service Unavailable

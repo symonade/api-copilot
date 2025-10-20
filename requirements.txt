@@ -1,0 +1,14 @@
+google-generativeai
+langchain-google-genai
+langchain-community
+langchain-core
+langchain
+langgraph
+python-dotenv
+streamlit
+chromadb
+pydantic
+PyYAML
+requests
+rich
+langchain-chroma

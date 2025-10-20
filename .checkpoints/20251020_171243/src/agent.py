@@ -1,0 +1,366 @@
+# src/agent.py
+import os
+import sys
+import json
+import re
+from typing import Any, Dict, List, Optional, TypedDict
+
+from dotenv import load_dotenv
+
+# --- Load environment ---------------------------------------------------------
+# .env is one level up from /src
+dotenv_path = os.path.join(os.path.dirname(__file__), "..", ".env")
+load_dotenv(dotenv_path=dotenv_path)
+
+API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000").strip()
+print(f"API_BASE_URL resolved at startup: {API_BASE_URL}")
+
+# LLM configuration with fallback + caps
+PRIMARY_MODEL = os.getenv("LLM_MODEL_PRIMARY", os.getenv("LLM_MODEL", "gemini-2.5-flash-lite")).strip()
+FALLBACK_MODEL = os.getenv("LLM_MODEL_FALLBACK", "gemini-1.5-flash").strip()
+try:
+    MAX_OUTPUT_TOKENS = int(os.getenv("MAX_OUTPUT_TOKENS", "512"))
+except ValueError:
+    MAX_OUTPUT_TOKENS = 512
+
+# --- Imports that depend on installed versions --------------------------------
+from langgraph.graph import StateGraph, END
+from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_google_genai import ChatGoogleGenerativeAI
+
+# Tools (LangChain @tool objects)
+# We support both `get_tools()` presence and direct imports for robustness.
+search_documentation = None
+check_api_status = None
+try:
+    from src.tools import get_tools  # if available
+    tools_list = get_tools()
+    # Expect tools named exactly as in your tools.py
+    for t in tools_list:
+        if getattr(t, "name", "") == "search_documentation":
+            search_documentation = t
+        if getattr(t, "name", "") == "check_api_status":
+            check_api_status = t
+    print("src.tools loaded via get_tools().")
+except Exception as e:
+    try:
+        from src.tools import search_documentation as _sd, check_api_status as _hc
+        search_documentation = _sd
+        check_api_status = _hc
+        print("src.tools loaded via direct imports.")
+    except Exception as e2:
+        print(f"WARNING: could not import tools: {e2}")
+
+if search_documentation is None or check_api_status is None:
+    print("WARNING: Tools missing — RAG and health checks will be skipped.")
+
+# --- Safe LLM init with fallback ----------------------------------------------
+def _init_llm(model_name: str) -> ChatGoogleGenerativeAI:
+    print(f"Attempting to initialize LLM with model: {model_name}")
+    llm = ChatGoogleGenerativeAI(
+        model=model_name,
+        max_output_tokens=MAX_OUTPUT_TOKENS,
+        temperature=0.2,
+    )
+    print(f"LLM initialized successfully with model: {model_name} (max_output_tokens={MAX_OUTPUT_TOKENS})")
+    return llm
+
+def init_llm_with_fallback() -> ChatGoogleGenerativeAI:
+    try:
+        return _init_llm(PRIMARY_MODEL)
+    except Exception as e:
+        print(f"Primary model '{PRIMARY_MODEL}' failed: {e}. Falling back to '{FALLBACK_MODEL}'")
+        return _init_llm(FALLBACK_MODEL)
+
+llm = init_llm_with_fallback()
+
+# --- Graph state ---------------------------------------------------------------
+class AgentState(TypedDict, total=False):
+    user_query: str
+    api_status: Dict[str, Any]
+    docs: List[Dict[str, Any]]
+    plan: List[Dict[str, Any]]
+    answer: str
+    pm_score: Dict[str, Any]
+    route: str
+    events: List[str]
+
+def _append_event(state: AgentState, name: str) -> None:
+    if "events" not in state or not isinstance(state["events"], list):
+        state["events"] = []
+    state["events"].append(name)
+
+# --- Nodes --------------------------------------------------------------------
+
+def health_check_node(state: AgentState) -> AgentState:
+    """If the query mentions status/503/etc, run the health tool with API_BASE_URL."""
+    _append_event(state, "health_check")
+    query = (state.get("user_query") or "").lower()
+
+    # Heuristic: run health check for status/5xx keywords
+    should_check = any(k in query for k in ["status", "503", "502", "500", "timeout", "down", "health"])
+    if not should_check:
+        state["api_status"] = {"status": "skipped"}
+        return state
+
+    if check_api_status is None:
+        state["api_status"] = {"status": "skipped", "details": "health tool unavailable"}
+        return state
+
+    try:
+        print(f"Performing API health check using tool... base_url={API_BASE_URL}")
+        # IMPORTANT: call tools via .invoke({...})
+        resp = check_api_status.invoke({"base_url": API_BASE_URL})
+        # Some tool wrappers return strings; normalise to dict
+        state["api_status"] = resp if isinstance(resp, dict) else {"status": "unknown", "raw": str(resp)}
+    except Exception as e:
+        print(f"Health check failed: {e}")
+        state["api_status"] = {"status": "error", "details": str(e)}
+    return state
+
+
+def router_node(state: AgentState) -> AgentState:
+    """Decide next action. Always return dict with a 'route' key."""
+    _append_event(state, "router")
+    q = (state.get("user_query") or "").lower()
+    api_status = (state.get("api_status") or {}).get("status", "skipped")
+
+    # If user asks status and we have a known status -> synthesizer
+    if "status" in q and api_status in {"Operational", "Unavailable", "Unreachable", "error"}:
+        route = "synthesizer"
+    # Multi-step intents
+    elif any(w in q for w in ["create a project", "add cost", "workflow", "sequence", "steps", "multi-step"]):
+        route = "planner"
+    # Auth or specific lookup → executor
+    elif any(w in q for w in ["auth", "authenticate", "token", "api key", "503", "error"]):
+        route = "executor"
+    else:
+        route = "synthesizer"
+
+    state["route"] = route
+    return state
+
+
+def planner_node(state: AgentState) -> AgentState:
+    """Produce a simple deterministic plan to keep it reliable and quota-friendly."""
+    _append_event(state, "planner")
+    q = (state.get("user_query") or "").lower()
+    plan: List[Dict[str, Any]] = []
+
+    if "create a project" in q and "cost" in q:
+        plan = [
+            {"order": 1, "description": "Create a project via POST /projects."},
+            {"order": 2, "description": "Add cost items via POST /projects/{projectId}/cost-items."},
+        ]
+    elif "auth" in q or "authenticate" in q or "api key" in q or "token" in q:
+        plan = [
+            {"order": 1, "description": "Obtain API Key from Developer Portal."},
+            {"order": 2, "description": "Send requests with X-API-Key header."},
+        ]
+    else:
+        # Fallback: single-step "look it up"
+        plan = [{"order": 1, "description": "Look up relevant endpoints in the docs."}]
+
+    state["plan"] = plan
+    return state
+
+
+def executor_node(state: AgentState) -> AgentState:
+    """Run a RAG lookup using search_documentation tool and stash results."""
+    _append_event(state, "executor")
+    if search_documentation is None:
+        state["docs"] = []
+        return state
+
+    query = state.get("user_query") or ""
+    try:
+        print("\n--- Running RAG Search ---")
+        print(f"Query: {query}")
+        # IMPORTANT: call tools via .invoke({...})
+        results = search_documentation.invoke({"query": query, "k": 4})
+        # Normalise return to a list of dicts
+        if isinstance(results, list):
+            state["docs"] = results
+        elif isinstance(results, dict):
+            state["docs"] = [results]
+        else:
+            state["docs"] = [{"message": str(results)}]
+    except Exception as e:
+        print(f"Executor error: {e}")
+        state["docs"] = [{"error": str(e)}]
+    return state
+
+
+def _render_sources(docs: List[Dict[str, Any]], k: int = 3) -> str:
+    out = []
+    for i, d in enumerate(docs[:k], 1):
+        meta = d.get("metadata", {})
+        src = meta.get("source") or meta.get("file") or meta.get("path") or "documentation"
+        out.append(f"{i}. {src}")
+    if not out:
+        return ""
+    return "\n\n**Sources**:\n" + "\n".join(out)
+
+
+def synthesizer_node(state: AgentState) -> AgentState:
+    """Draft the final answer with LLM (fallback to templated if quota/rate-limit)."""
+    _append_event(state, "synthesizer")
+
+    query = state.get("user_query") or ""
+    api_status = state.get("api_status") or {"status": "N/A"}
+    docs = state.get("docs") or []
+    plan = state.get("plan") or []
+
+    system = (
+        "You are ConTech API Integration Co-Pilot. "
+        "Be concise, accurate, and include cURL + Python `requests` when helpful. "
+        "If API status is present, summarise it first. If plan exists, summarise steps. "
+        "Ground answers in retrieved docs when available and call that out as 'Sources'."
+    )
+    fewshot = "Return no more than ~300 words."
+
+    try:
+        prompt = ChatPromptTemplate.from_messages(
+            [
+                ("system", system),
+                ("human",
+                 "User query:\n{query}\n\n"
+                 "API status (if any):\n{api_status}\n\n"
+                 "Plan (if any):\n{plan}\n\n"
+                 "Top doc snippets (if any):\n{docs}\n\n"
+                 f"{fewshot}")
+            ]
+        )
+        chain = prompt | llm
+        rendered_docs = json.dumps(docs, ensure_ascii=False)[:4000]
+        rendered_plan = json.dumps(plan, ensure_ascii=False)[:1500]
+        # Avoid passing 'skipped' status into the LLM prompt
+        api_status_for_prompt = api_status
+        try:
+            if isinstance(api_status, dict) and api_status.get("status") == "skipped":
+                api_status_for_prompt = {"status": "N/A"}
+        except Exception:
+            api_status_for_prompt = api_status
+        msg = chain.invoke(
+            {
+                "query": query,
+                "api_status": api_status_for_prompt,
+                "plan": rendered_plan,
+                "docs": rendered_docs,
+            }
+        )
+        answer = msg.content if hasattr(msg, "content") else str(msg)
+    except Exception as e:
+        # Fallback plain synth if model is unavailable
+        answer = (
+            f"Placeholder synthesized response for query: '{query}'. "
+            f"(LLM error: {e})"
+        )
+
+    # Add a short source list for the Streamlit/UI side
+    answer += _render_sources(docs)
+    state["answer"] = answer
+    return state
+
+
+def prioritization_node(state: AgentState) -> AgentState:
+    """Very lightweight PM scoring so the UI always gets a structured block."""
+    _append_event(state, "prioritization")
+    q = (state.get("user_query") or "").lower()
+
+    freq = 2  # 1–5
+    gap = 2
+    risk = 2
+    if any(k in q for k in ["auth", "authenticate", "api key", "token"]):
+        freq, gap, risk = 4, 4, 3
+    if "503" in q or "error" in q or "down" in q:
+        freq, gap, risk = 3, 3, 4
+    if "create a project" in q and "cost" in q:
+        freq, gap, risk = 3, 4, 3
+
+    state["pm_score"] = {
+        "pain_frequency": freq,
+        "doc_gap": gap,
+        "systemic_risk": risk,
+        "recommendation": (
+            "Add end-to-end examples and quickstarts; ensure auth + common workflows "
+            "are clearly documented with request/response samples."
+        ),
+    }
+    return state
+
+# --- Graph wiring --------------------------------------------------------------
+def route_edge_selector(state: AgentState) -> str:
+    """Return the name of the next node based on state['route']."""
+    route = state.get("route") or "synthesizer"
+    # Map symbolic route → node id
+    if route == "planner":
+        return "planner"
+    if route == "executor":
+        return "executor"
+    return "synthesizer"
+
+def build_graph():
+    graph = StateGraph(AgentState)
+
+    graph.add_node("health", health_check_node)
+    graph.add_node("router", router_node)
+    graph.add_node("planner", planner_node)
+    graph.add_node("executor", executor_node)
+    graph.add_node("synthesizer", synthesizer_node)
+    graph.add_node("prioritization", prioritization_node)
+
+    # Start → health → router → (conditional) → synth/executor/planner → synthesizer → prioritization → END
+    graph.set_entry_point("health")
+    graph.add_edge("health", "router")
+    graph.add_conditional_edges("router", route_edge_selector, {
+        "planner": "planner",
+        "executor": "executor",
+        "synthesizer": "synthesizer",
+    })
+    # If planner ran, go executor (RAG) next, then synth
+    graph.add_edge("planner", "executor")
+    # From executor, go synth
+    graph.add_edge("executor", "synthesizer")
+    # From synth, go PM
+    graph.add_edge("synthesizer", "prioritization")
+    # Finish
+    graph.add_edge("prioritization", END)
+
+    return graph.compile()
+
+# --- Demo runner ---------------------------------------------------------------
+def run_once(app, query: str):
+    init: AgentState = {"user_query": query}
+    print("\n\n===== Running Query:", query, "=====")
+    final = app.invoke(init)
+
+    # Pretty print essential data
+    print("\n--- Final State ---")
+    print("API Status:", final.get("api_status"))
+    print("Retrieved Docs:", bool(final.get("docs")))
+    print("Plan Generated:", bool(final.get("plan")))
+    ans = final.get("answer") or ""
+    snippet = ans if len(ans) < 800 else ans[:800]
+    print("\n--- Final Response (truncated) ---")
+    print(snippet)
+    return final
+
+if __name__ == "__main__":
+    app = build_graph()
+    print("LangGraph compiled.")
+
+    # Quick demo batch to mirror earlier testing
+    queries = [
+        "What is the API status?",
+        "How do I authenticate to the API?",
+        "Create a project and add some cost items.",
+        "Hello there!",
+        "My API calls are failing with 503 errors.",
+    ]
+    for q in queries:
+        try:
+            run_once(app, q)
+        except Exception as e:
+            print(f"\n[ERROR] while running '{q}': {e}\n")
