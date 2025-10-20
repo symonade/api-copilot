@@ -1,0 +1,30 @@
+INFO:     127.0.0.1:62435 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:62437 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62442 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:62444 - "GET /status HTTP/1.1" 200 OK
+   INFO:     127.0.0.1:50409 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:50411 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50416 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:50419 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50421 - "POST /projects HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:50424 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:50426 - "GET /status HTTP/1.1" 200 OK
+ INFO:     127.0.0.1:55549 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:55551 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55555 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:55557 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55559 - "POST /projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55561 - "POST /projects/proj_4221/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55563 - "POST /projects/proj_4221/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55566 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:55568 - "GET /status HTTP/1.1" 200 OK
+ INFO:     127.0.0.1:55881 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:55883 - "GET /status HTTP/1.1" 200 OK
+ INFO:     127.0.0.1:56561 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:56563 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57482 - "POST /projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57484 - "POST /projects/proj_6413/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57487 - "POST /projects/proj_6413/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57489 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:57491 - "GET /status HTTP/1.1" 200 OK
+ 

@@ -78,7 +78,7 @@ API_REGISTRY.register(SchedulerApi())
 
 def choose_api_for_query(user_query: str):
     adapter = API_REGISTRY.select_for_query(user_query)
-    print(f"[Router] Selected API → {adapter.name} ({adapter.base_url})")
+    print(f"[Router] Selected API ? {adapter.name} ({adapter.base_url})")
     return adapter
 
 # --- Safe LLM init with fallback ----------------------------------------------
@@ -414,7 +414,7 @@ def prioritization_node(state: AgentState) -> AgentState:
 def route_edge_selector(state: AgentState) -> str:
     """Return the name of the next node based on state['route']."""
     route = state.get("route") or "synthesizer"
-    # Map symbolic route → node id
+    # Map symbolic route ? node id
     if route == "planner":
         return "planner"
     if route == "executor":
@@ -493,3 +493,4 @@ if __name__ == "__main__":
             run_once(app, q)
         except Exception as e:
             print(f"\n[ERROR] while running '{q}': {e}\n")
+
