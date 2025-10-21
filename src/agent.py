@@ -496,6 +496,62 @@ def run_once(app, query: str):
     print(snippet)
     return final
 
+# --- Public single-turn entrypoint for web/REST ---
+def run_agent_once(user_query: str) -> dict:
+    """
+    Runs one agent turn for a given user query and returns a dict:
+    {
+      "selected_api": "<name>",
+      "api_base_url": "<url>",
+      "api_status": {...} | None,
+      "retrieved_docs": [...],
+      "plan_generated": bool,
+      "final_text": "<concise answer to user>"
+    }
+    """
+    try:
+        app = build_graph()
+        init_state: AgentState = {"user_query": user_query}
+        final = app.invoke(init_state)
+
+        sel = final.get("selected_api") or {}
+        api_name = sel.get("name") if isinstance(sel, dict) else None
+        api_url = sel.get("base_url") if isinstance(sel, dict) else None
+
+        api_status = final.get("api_status")
+        if isinstance(api_status, dict) and api_status.get("status") == "skipped":
+            api_status_out = None
+        else:
+            api_status_out = api_status if isinstance(api_status, dict) else None
+
+        docs = final.get("docs") or []
+        plan_generated = bool(final.get("plan"))
+        text = final.get("answer") or ""
+        # Keep concise: limit to ~5 lines / 800 chars
+        lines = [l for l in text.splitlines() if l.strip()]
+        short = "\n".join(lines[:6])
+        if len(short) > 800:
+            short = short[:800]
+
+        return {
+            "selected_api": api_name,
+            "api_base_url": api_url,
+            "api_status": api_status_out,
+            "retrieved_docs": docs if isinstance(docs, list) else [],
+            "plan_generated": plan_generated,
+            "final_text": short,
+        }
+    except Exception as e:
+        return {
+            "error": str(e),
+            "selected_api": None,
+            "api_base_url": None,
+            "api_status": None,
+            "retrieved_docs": [],
+            "plan_generated": False,
+            "final_text": "Sorry, something went wrong running the agent.",
+        }
+
 def run_demos():
     app = build_graph()
     print("LangGraph compiled.")

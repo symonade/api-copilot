@@ -63,3 +63,16 @@ INFO:     127.0.0.1:64848 - "GET /features HTTP/1.1" 500 Internal Server Error
  INFO:     127.0.0.1:56620 - "GET /features HTTP/1.1" 200 OK
 INFO:     127.0.0.1:58389 - "GET /features HTTP/1.1" 200 OK
 INFO:     127.0.0.1:59647 - "GET /features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55740 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55742 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:55744 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55747 - "POST /projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55749 - "POST /projects/proj_7423/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55751 - "POST /projects/proj_7423/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55755 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:55757 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55765 - "POST /projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55773 - "POST /projects/proj_2115/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55775 - "POST /projects/proj_2115/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53400 - "GET /features HTTP/1.1" 200 OK
+  INFO:     127.0.0.1:61949 - "GET /features HTTP/1.1" 200 OK

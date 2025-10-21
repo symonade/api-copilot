@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: api-copilot-demo
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn src.web_app:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: GOOGLE_API_KEY
+        sync: false
+      - key: MODEL_NAME
+        value: "gemini-2.5-flash-lite"
+      - key: MODEL_FALLBACK
+        value: "gemini-1.5-flash"
+      - key: MAX_OUTPUT_TOKENS
+        value: "512"
+      - key: PRIMARY_API_BASE_URL
+        value: "https://api-copilot-demo.onrender.com/mock"
+      - key: SECONDARY_API_BASE_URL
+        value: "https://api-copilot-demo.onrender.com/mock2"
+      - key: APP_OWNER
+        value: "Platform Engineering"
+
