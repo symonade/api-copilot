@@ -25,11 +25,12 @@ class SecurityHeadersMiddleware:
                 # Allow local + CDNs used by the demo (HTMX + Tailwind CDN)
                 # For demo reliability on Render, allow all HTTPS CDNs for script/style
                 # (safer alternative: self-host assets and tighten back to 'self').
+                # Scripts self-hosted (inline allowed for small utilities). Styles via HTTPS CDN (Tailwind).
                 csp = (
                     "default-src 'self'; "
                     "img-src 'self' data:; "
                     "style-src 'self' 'unsafe-inline' https:; "
-                    "script-src 'self' 'unsafe-inline' https:; "
+                    "script-src 'self' 'unsafe-inline'; "
                     "connect-src 'self'"
                 )
                 add("content-security-policy", csp)

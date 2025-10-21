@@ -81,7 +81,6 @@ async def index(request: Request):
   <head>
     <meta charset="utf-8"/>
     <title>API Copilot</title>
-    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body class="min-h-screen bg-slate-50 text-slate-900">
@@ -98,60 +97,72 @@ async def index(request: Request):
         REPL_HERE
       </section>
 
+      <div id="typingBubble" style="display:none" class="flex justify-start mb-1"><div class="max-w-[80%] bg-slate-50 border border-slate-200 rounded-2xl px-3 py-2 text-xs text-slate-500">Thinking...</div></div>
       <section class="bg-white rounded-2xl shadow p-3 sticky bottom-0">
-        <form hx-post="/chat" hx-trigger="submit" hx-target="#chat-window" hx-swap="innerHTML" hx-indicator="#chat-loading" hx-disabled-elt="#sendBtn" hx-on="htmx:afterOnLoad: (() => { const ta = this.querySelector('textarea[name=message]'); if (ta){ ta.value=''; ta.focus(); } const cw = document.getElementById('chat-window'); if(cw){ cw.scrollTop = cw.scrollHeight; } })()">
+        <form id="chatForm" onsubmit="event.preventDefault(); postForm('/chat', this, 'chat-window'); return false;">
           <div class="flex gap-2">
             <textarea name="message" required rows="2" class="flex-1 border rounded-xl px-3 py-2 focus:outline-none focus:ring" placeholder="Ask a question…" onkeydown="if(event.key==='Enter' && !event.shiftKey){ event.preventDefault(); this.form.requestSubmit(); }"></textarea>
             <button id="sendBtn" class="px-4 py-2 bg-slate-900 text-white rounded-xl h-fit">Send</button>
           </div>
           <div class="flex items-center justify-between mt-2 text-xs">
             <div class="space-x-2">
-              <button type="button" class="underline" hx-post="/chat/new" hx-target="#chat-window" hx-swap="innerHTML">New Chat</button>
+              <button type="button" class="underline" onclick="postSimple('/chat/new','chat-window')">New Chat</button>
               <button type="button" class="underline" onclick="copyTranscript()">Copy Transcript</button>
-              <button type="button" class="underline" hx-post="/chat/share" hx-target="#share-out" hx-swap="innerHTML">Share</button>
-              <span id="chat-loading" class="hidden htmx-indicator text-slate-500">Sending…</span>
+              <button type="button" class="underline" onclick="postSimple('/chat/share','share-out')">Share</button>
             </div>
             <span class="text-slate-500">Using: <code>""" + os.getenv("MODEL_NAME", "gemini-2.5-flash-lite") + """</code></span>
           </div>
         </form>
         <div id="share-out" class="mt-2 text-xs text-slate-600"></div>
         <div class="mt-2 flex flex-wrap gap-2 text-xs">
-          <button class="px-2 py-1 rounded-full bg-slate-100 hover:bg-slate-200" 
-                  hx-post="/chat" hx-target="#chat-window" hx-swap="innerHTML" 
-                  hx-vals='{"message":"How do I authenticate to the API?"}' 
-                  hx-on="htmx:afterOnLoad: (()=>{const cw=document.getElementById('chat-window'); if(cw){ cw.scrollTop=cw.scrollHeight; }})()">How do I authenticate?</button>
-          <button class="px-2 py-1 rounded-full bg-slate-100 hover:bg-slate-200" 
-                  hx-post="/chat" hx-target="#chat-window" hx-swap="innerHTML" 
-                  hx-vals='{"message":"Create a project and add some cost items."}' 
-                  hx-on="htmx:afterOnLoad: (()=>{const cw=document.getElementById('chat-window'); if(cw){ cw.scrollTop=cw.scrollHeight; }})()">Create a project + cost</button>
-          <button class="px-2 py-1 rounded-full bg-slate-100 hover:bg-slate-200" 
-                  hx-post="/chat" hx-target="#chat-window" hx-swap="innerHTML" 
-                  hx-vals='{"message":"My API calls are failing with 503 errors."}' 
-                  hx-on="htmx:afterOnLoad: (()=>{const cw=document.getElementById('chat-window'); if(cw){ cw.scrollTop=cw.scrollHeight; }})()">Troubleshoot 503</button>
+          <button class="px-2 py-1 rounded-full bg-slate-100 hover:bg-slate-200" onclick="sendMessage('How do I authenticate to the API?')">How do I authenticate?</button>
+          <button class="px-2 py-1 rounded-full bg-slate-100 hover:bg-slate-200" onclick="sendMessage('Create a project and add some cost items.')">Create a project + cost</button>
+          <button class="px-2 py-1 rounded-full bg-slate-100 hover:bg-slate-200" onclick="sendMessage('My API calls are failing with 503 errors.')">Troubleshoot 503</button>
+          <button class="px-2 py-1 rounded-full bg-slate-100 hover:bg-slate-200" onclick="sendMessage('List available API endpoints')">List endpoints</button>
+          <button class="px-2 py-1 rounded-full bg-slate-100 hover:bg-slate-200" onclick="sendMessage('What are the rate limits?')">Rate limits</button>
         </div>
       </section>
       <script>
       async function copyTranscript(){
-        try{
-          const resp = await fetch('/chat/transcript');
-          const txt = await resp.text();
-          await navigator.clipboard.writeText(txt);
-          alert('Transcript copied');
-        }catch(e){ alert('Copy failed'); }
+        try{ const r=await fetch('/chat/transcript'); const t=await r.text(); await navigator.clipboard.writeText(t); alert('Transcript copied'); }catch(e){ alert('Copy failed'); }
       }
-      // Small Operational badge via HTMX fetch to /mock/status
-      window._setStatusBadge = function(e){
-        try{
-          const data = JSON.parse(e.detail.xhr.responseText || '{}');
-          const ok = (data && (data.ok === true || data.status === 'OK' || data.ok === 'true'));
-          const el = document.getElementById('op-badge');
-          if(!el) return;
-          if(ok){ el.className='px-2 py-1 rounded bg-green-100 text-green-800'; el.textContent='🟢 Operational'; }
-          else { el.className='px-2 py-1 rounded bg-amber-100 text-amber-800'; el.textContent='🟠 Issues'; }
-        }catch(err){ /* ignore */ }
+      async function updateBadge(){
+        try{ const r=await fetch('/mock/status'); const d=await r.json(); const ok=(d && (d.ok===true || d.status==='OK' || d.ok==='true')); const el=document.getElementById('op-badge'); if(!el) return; if(ok){ el.className='px-2 py-1 rounded bg-green-100 text-green-800'; el.textContent='🟢 Operational'; } else { el.className='px-2 py-1 rounded bg-amber-100 text-amber-800'; el.textContent='🟠 Issues'; } }catch(e){}
       }
+      async function postForm(url, form, targetId){
+        const target=document.getElementById(targetId);
+        const sendBtn=document.getElementById('sendBtn');
+        const typing=document.getElementById('typingBubble');
+        try{
+          if(sendBtn) sendBtn.disabled=true;
+          if(typing) typing.style.display='block';
+          const fd=new FormData(form);
+          const r=await fetch(url,{method:'POST', body:fd});
+          const html=await r.text();
+          if(target) target.innerHTML=html;
+        } finally {
+          if(typing) typing.style.display='none';
+          if(sendBtn) sendBtn.disabled=false;
+          const ta=form.querySelector('textarea[name=message]'); if(ta){ ta.value=''; ta.focus(); }
+          const cw=document.getElementById('chat-window'); if(cw){ cw.scrollTop=cw.scrollHeight; }
+        }
+      }
+      async function postSimple(url, targetId){
+        const target=document.getElementById(targetId);
+        const typing=document.getElementById('typingBubble');
+        try{
+          if(typing) typing.style.display='block';
+          const r=await fetch(url,{method:'POST'});
+          const html=await r.text();
+          if(target) target.innerHTML=html;
+        } finally { if(typing) typing.style.display='none'; const cw=document.getElementById('chat-window'); if(cw){ cw.scrollTop=cw.scrollHeight; } }
+      }
+      async function sendMessage(text){
+        const f=document.getElementById('chatForm'); if(!f) return; const fd=new FormData(); fd.append('message',text); const target=document.getElementById('chat-window'); const typing=document.getElementById('typingBubble');
+        try{ if(typing) typing.style.display='block'; const r=await fetch('/chat',{method:'POST', body:fd}); const html=await r.text(); if(target) target.innerHTML=html; } finally { if(typing) typing.style.display='none'; const cw=document.getElementById('chat-window'); if(cw){ cw.scrollTop=cw.scrollHeight; } }
+      }
+      window.addEventListener('load', updateBadge);
       </script>
-      <div hx-get="/mock/status" hx-trigger="load" hx-swap="none" hx-on="htmx:afterOnLoad: window._setStatusBadge(event)"></div>
 
       <section class="bg-white rounded-2xl shadow p-4">
         <h2 class="font-medium mb-2">About this demo</h2>
