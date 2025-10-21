@@ -23,11 +23,13 @@ class SecurityHeadersMiddleware:
                 add("referrer-policy", "no-referrer")
                 add("permissions-policy", "geolocation=(), microphone=(), camera=()")
                 # Allow local + CDNs used by the demo (HTMX + Tailwind CDN)
+                # For demo reliability on Render, allow all HTTPS CDNs for script/style
+                # (safer alternative: self-host assets and tighten back to 'self').
                 csp = (
                     "default-src 'self'; "
                     "img-src 'self' data:; "
-                    "style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; "
-                    "script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.tailwindcss.com; "
+                    "style-src 'self' 'unsafe-inline' https:; "
+                    "script-src 'self' 'unsafe-inline' https:; "
                     "connect-src 'self'"
                 )
                 add("content-security-policy", csp)
