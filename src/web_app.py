@@ -89,31 +89,46 @@ async def index(request: Request):
       <header class="flex items-center justify-between">
         <h1 class="text-2xl font-semibold">API Copilot</h1>
         <div class="flex items-center gap-3 text-sm">
-          <span id="op-badge" class="px-2 py-1 rounded bg-amber-100 text-amber-800">🟠 Checking…</span>
+          <span id="op-badge" class="px-2 py-1 rounded bg-amber-100 text-amber-800">🟠 Checking...</span>
           <a href="/mock/status" class="text-slate-500 hover:text-slate-700 underline">Mock API Status</a>
         </div>
       </header>
 
-      <section id="chat-window" class="bg-white rounded-2xl shadow p-4 text-sm text-slate-800 min-h-[300px]">
+      <section id="chat-window" class="bg-white rounded-2xl shadow p-4 text-sm text-slate-800 min-h-[300px] max-h-[60vh] overflow-y-auto">
         REPL_HERE
       </section>
 
       <section class="bg-white rounded-2xl shadow p-3 sticky bottom-0">
-        <form hx-post="/chat" hx-trigger="submit" hx-target="#chat-window" hx-swap="innerHTML">
+        <form hx-post="/chat" hx-trigger="submit" hx-target="#chat-window" hx-swap="innerHTML" hx-indicator="#chat-loading" hx-disabled-elt="#sendBtn" hx-on="htmx:afterOnLoad: (() => { const ta = this.querySelector('textarea[name=message]'); if (ta){ ta.value=''; ta.focus(); } const cw = document.getElementById('chat-window'); if(cw){ cw.scrollTop = cw.scrollHeight; } })()">
           <div class="flex gap-2">
-            <textarea name="message" required rows="2" class="flex-1 border rounded-xl px-3 py-2 focus:outline-none focus:ring" placeholder="Ask a question…"></textarea>
-            <button class="px-4 py-2 bg-slate-900 text-white rounded-xl h-fit">Send</button>
+            <textarea name="message" required rows="2" class="flex-1 border rounded-xl px-3 py-2 focus:outline-none focus:ring" placeholder="Ask a question…" onkeydown="if(event.key==='Enter' && !event.shiftKey){ event.preventDefault(); this.form.requestSubmit(); }"></textarea>
+            <button id="sendBtn" class="px-4 py-2 bg-slate-900 text-white rounded-xl h-fit">Send</button>
           </div>
           <div class="flex items-center justify-between mt-2 text-xs">
             <div class="space-x-2">
               <button type="button" class="underline" hx-post="/chat/new" hx-target="#chat-window" hx-swap="innerHTML">New Chat</button>
               <button type="button" class="underline" onclick="copyTranscript()">Copy Transcript</button>
               <button type="button" class="underline" hx-post="/chat/share" hx-target="#share-out" hx-swap="innerHTML">Share</button>
+              <span id="chat-loading" class="hidden htmx-indicator text-slate-500">Sending…</span>
             </div>
             <span class="text-slate-500">Using: <code>""" + os.getenv("MODEL_NAME", "gemini-2.5-flash-lite") + """</code></span>
           </div>
         </form>
         <div id="share-out" class="mt-2 text-xs text-slate-600"></div>
+        <div class="mt-2 flex flex-wrap gap-2 text-xs">
+          <button class="px-2 py-1 rounded-full bg-slate-100 hover:bg-slate-200" 
+                  hx-post="/chat" hx-target="#chat-window" hx-swap="innerHTML" 
+                  hx-vals='{"message":"How do I authenticate to the API?"}' 
+                  hx-on="htmx:afterOnLoad: (()=>{const cw=document.getElementById('chat-window'); if(cw){ cw.scrollTop=cw.scrollHeight; }})()">How do I authenticate?</button>
+          <button class="px-2 py-1 rounded-full bg-slate-100 hover:bg-slate-200" 
+                  hx-post="/chat" hx-target="#chat-window" hx-swap="innerHTML" 
+                  hx-vals='{"message":"Create a project and add some cost items."}' 
+                  hx-on="htmx:afterOnLoad: (()=>{const cw=document.getElementById('chat-window'); if(cw){ cw.scrollTop=cw.scrollHeight; }})()">Create a project + cost</button>
+          <button class="px-2 py-1 rounded-full bg-slate-100 hover:bg-slate-200" 
+                  hx-post="/chat" hx-target="#chat-window" hx-swap="innerHTML" 
+                  hx-vals='{"message":"My API calls are failing with 503 errors."}' 
+                  hx-on="htmx:afterOnLoad: (()=>{const cw=document.getElementById('chat-window'); if(cw){ cw.scrollTop=cw.scrollHeight; }})()">Troubleshoot 503</button>
+        </div>
       </section>
       <script>
       async function copyTranscript(){
