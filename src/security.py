@@ -22,8 +22,15 @@ class SecurityHeadersMiddleware:
                 add("x-frame-options", "DENY")
                 add("referrer-policy", "no-referrer")
                 add("permissions-policy", "geolocation=(), microphone=(), camera=()")
-                add("content-security-policy", "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self'")
+                # Allow local + CDNs used by the demo (HTMX + Tailwind CDN)
+                csp = (
+                    "default-src 'self'; "
+                    "img-src 'self' data:; "
+                    "style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; "
+                    "script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.tailwindcss.com; "
+                    "connect-src 'self'"
+                )
+                add("content-security-policy", csp)
             await send(message)
 
         await self.app(scope, receive, send_wrapper)
-
