@@ -45,4 +45,21 @@ INFO:     127.0.0.1:63161 - "POST /projects/proj_5028/cost-items HTTP/1.1" 200 O
 INFO:     127.0.0.1:63163 - "POST /projects/proj_5028/cost-items HTTP/1.1" 200 OK
 INFO:     127.0.0.1:63165 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
 INFO:     127.0.0.1:52525 - "GET /status HTTP/1.1" 200 OK
-   
+   INFO:     127.0.0.1:58801 - "GET /status HTTP/1.1" 200 OK
+ INFO:     127.0.0.1:58808 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:58810 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50084 - "POST /projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55915 - "POST /projects/proj_3101/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55917 - "POST /projects/proj_3101/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55925 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:55927 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55935 - "POST /projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55937 - "POST /projects/proj_3618/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55939 - "POST /projects/proj_3618/cost-items HTTP/1.1" 200 OK
+   INFO:     127.0.0.1:65151 - "GET /features HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:51674 - "GET /features HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:64848 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64848 - "GET /features HTTP/1.1" 500 Internal Server Error
+ INFO:     127.0.0.1:56620 - "GET /features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58389 - "GET /features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59647 - "GET /features HTTP/1.1" 200 OK

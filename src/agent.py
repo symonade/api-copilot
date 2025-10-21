@@ -496,11 +496,10 @@ def run_once(app, query: str):
     print(snippet)
     return final
 
-if __name__ == "__main__":
+def run_demos():
     app = build_graph()
     print("LangGraph compiled.")
 
-    # Quick demo batch to mirror earlier testing
     queries = [
         "What is the API status?",
         "How do I authenticate to the API?",
@@ -514,6 +513,24 @@ if __name__ == "__main__":
             run_once(app, q)
         except Exception as e:
             print(f"\n[ERROR] while running '{q}': {e}\n")
+
+
+def run_repl():
+    app = build_graph()
+    print("LangGraph compiled.")
+    try:
+        from src.cli.repl import run_repl as _run_repl
+        _run_repl(app, agent_module=__import__(__name__))
+    except Exception as e:
+        print(f"REPL failed: {e}")
+
+
+if __name__ == "__main__":
+    args = sys.argv[1:]
+    if args and args[0] == "--repl":
+        run_repl()
+    else:
+        run_demos()
 
 
 

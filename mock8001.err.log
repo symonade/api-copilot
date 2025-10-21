@@ -174,3 +174,104 @@ INFO:     Started server process [16640]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 WARNING:  WatchFiles detected changes in 'src\eval_harness.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [16640]
+WARNING:  WatchFiles detected changes in 'venv\Lib\site-packages\_pytest\tracemalloc.py', 'venv\Lib\site-packages\_pytest\faulthandler.py', 'venv\Lib\site-packages\_pytest\mark\__init__.py', 'venv\Lib\site-packages\_pytest\cacheprovider.py', 'venv\Lib\site-packages\_pytest\reports.py', 'venv\Lib\site-packages\_pytest\junitxml.py', 'venv\Lib\site-packages\_pytest\config\__init__.py', 'venv\Lib\site-packages\_pytest\main.py', 'venv\Lib\site-packages\_pytest\config\argparsing.py', 'venv\Lib\site-packages\_pytest\_py\path.py', 'venv\Lib\site-packages\iniconfig\exceptions.py', 'venv\Lib\site-packages\_pytest\assertion\__init__.py', 'venv\Lib\site-packages\_pytest\nodes.py', 'venv\Lib\site-packages\_pytest\mark\expression.py', 'venv\Lib\site-packages\_pytest\doctest.py', 'venv\Lib\site-packages\_pytest\python.py', 'venv\Lib\site-packages\iniconfig\__init__.py', 'venv\Lib\site-packages\_pytest\scope.py', 'venv\Lib\site-packages\_pytest\fixtures.py', 'venv\Lib\site-packages\_pytest\hookspec.py', 'venv\Lib\site-packages\_pytest\logging.py', 'venv\Lib\site-packages\_pytest\python_api.py', 'venv\Lib\site-packages\_pytest\threadexception.py', 'venv\Lib\site-packages\_pytest\__init__.py', 'venv\Lib\site-packages\pluggy\__init__.py', 'venv\Lib\site-packages\_pytest\_code\code.py', 'venv\Lib\site-packages\pytest_timeout.py', 'venv\Lib\site-packages\_pytest\_code\__init__.py', 'venv\Lib\site-packages\_pytest\pytester.py', 'venv\Lib\site-packages\_pytest\unraisableexception.py', 'venv\Lib\site-packages\_pytest\_py\__init__.py', 'venv\Lib\site-packages\pluggy\_callers.py', 'venv\Lib\site-packages\_pytest\raises.py', 'venv\Lib\site-packages\_pytest\setupplan.py', 'scripts\run_eval.py', 'venv\Lib\site-packages\_pytest\timing.py', 'venv\Lib\site-packages\_pytest\_io\pprint.py', 'venv\Lib\site-packages\_pytest\assertion\rewrite.py', 'venv\Lib\site-packages\iniconfig\_parse.py', 'venv\Lib\site-packages\_pytest\pytester_assertions.py', 'venv\Lib\site-packages\_pytest\outcomes.py', 'venv\Lib\site-packages\_pytest\stash.py', 'venv\Lib\site-packages\_pytest\_version.py', 'venv\Lib\site-packages\pluggy\_tracing.py', 'venv\Lib\site-packages\pluggy\_result.py', 'venv\Lib\site-packages\_pytest\compat.py', 'venv\Lib\site-packages\_pytest\debugging.py', 'venv\Lib\site-packages\pluggy\_warnings.py', 'venv\Lib\site-packages\pytest\__main__.py', 'venv\Lib\site-packages\_pytest\recwarn.py', 'venv\Lib\site-packages\_pytest\_py\error.py', 'venv\Lib\site-packages\_pytest\stepwise.py', 'venv\Lib\site-packages\_pytest\freeze_support.py', 'venv\Lib\site-packages\_pytest\capture.py', 'venv\Lib\site-packages\_pytest\assertion\util.py', 'venv\Lib\site-packages\_pytest\runner.py', 'venv\Lib\site-packages\_pytest\deprecated.py', 'venv\Lib\site-packages\_pytest\tmpdir.py', 'venv\Lib\site-packages\_pytest\monkeypatch.py', 'venv\Lib\site-packages\_pytest\terminal.py', 'venv\Lib\site-packages\iniconfig\_version.py', 'venv\Lib\site-packages\py.py', 'venv\Lib\site-packages\_pytest\mark\structures.py', 'venv\Lib\site-packages\_pytest\unittest.py', 'tests\test_smoke.py', 'venv\Lib\site-packages\_pytest\_io\__init__.py', 'venv\Lib\site-packages\_pytest\config\compat.py', 'venv\Lib\site-packages\pytest\__init__.py', 'venv\Lib\site-packages\_pytest\_io\terminalwriter.py', 'venv\Lib\site-packages\pluggy\_manager.py', 'venv\Lib\site-packages\_pytest\warning_types.py', 'venv\Lib\site-packages\_pytest\_io\wcwidth.py', 'venv\Lib\site-packages\_pytest\config\findpaths.py', 'venv\Lib\site-packages\_pytest\warnings.py', 'venv\Lib\site-packages\_pytest\_io\saferepr.py', 'venv\Lib\site-packages\_pytest\_code\source.py', 'venv\Lib\site-packages\_pytest\skipping.py', 'venv\Lib\site-packages\_pytest\helpconfig.py', 'venv\Lib\site-packages\_pytest\config\exceptions.py', 'venv\Lib\site-packages\_pytest\pastebin.py', 'venv\Lib\site-packages\_pytest\legacypath.py', 'venv\Lib\site-packages\_pytest\assertion\truncate.py', 'venv\Lib\site-packages\_pytest\_argcomplete.py', 'venv\Lib\site-packages\_pytest\setuponly.py', 'venv\Lib\site-packages\pluggy\_hooks.py', 'venv\Lib\site-packages\_pytest\pathlib.py', 'venv\Lib\site-packages\pluggy\_version.py'. Reloading...
+INFO:     Started server process [27672]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:    Traceback (most recent call last):
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 720, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 194, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\opeye\api-copilot\venv\Lib\site-packages\starlette\routing.py", line 701, in lifespan
+    await receive()
+  File "C:\Users\opeye\api-copilot\venv\Lib\site-packages\uvicorn\lifespan\on.py", line 137, in receive
+    return await self.receive_queue.get()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\queues.py", line 186, in get
+    await getter
+asyncio.exceptions.CancelledError
+
+INFO:     Started server process [1392]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'streamlit_app.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1392]
+WARNING:  WatchFiles detected changes in 'src\agent.py', 'src\ui\features.py', 'src\mock_api.py'. Reloading...
+INFO:     Started server process [19260]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:    Traceback (most recent call last):
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 720, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 194, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\opeye\api-copilot\venv\Lib\site-packages\starlette\routing.py", line 701, in lifespan
+    await receive()
+  File "C:\Users\opeye\api-copilot\venv\Lib\site-packages\uvicorn\lifespan\on.py", line 137, in receive
+    return await self.receive_queue.get()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\queues.py", line 186, in get
+    await getter
+asyncio.exceptions.CancelledError
+
+INFO:     Started server process [8196]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'src\mock_api.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [8196]
+INFO:     Started server process [31536]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'src\ui\features.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [31536]
+INFO:     Started server process [29712]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
