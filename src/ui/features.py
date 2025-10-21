@@ -7,8 +7,12 @@ router = APIRouter()
 
 
 def _read_roadmap() -> dict:
-    p = Path(__file__).resolve().parents[1] / "product" / "roadmap.json"
-    return json.loads(p.read_text(encoding="utf-8"))
+    # src/ui/features.py -> parents[2] is the repo root
+    p = Path(__file__).resolve().parents[2] / "product" / "roadmap.json"
+    try:
+        return json.loads(p.read_text(encoding="utf-8"))
+    except Exception:
+        return {"version": "", "updated": "", "next": [], "later": []}
 
 
 @router.get("/features", response_class=HTMLResponse)
@@ -61,4 +65,3 @@ hr {{ border:none; border-top:1px solid #eee; margin:16px 0; }}
 </div>
 </body></html>
 """
-
