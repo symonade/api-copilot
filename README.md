@@ -48,6 +48,26 @@ Summary includes:
   - In bash: `export SHOW_FEATURES=1 && python -u -m src.agent`
   - Set to `0` (or unset) to keep banner off.
 
+## Local dev with .env.sample → .env
+
+- Copy `.env.sample` to `.env` and adjust values as needed. Do not commit secrets.
+- Ensure `PRIMARY_API_BASE_URL` points to your local mock (`http://localhost:8000`).
+
+## Quick start on Render
+
+- Push this repo to GitHub, then on Render choose “New → Blueprint” and select your repo.
+- Render uses `render.yaml` to build and run the service.
+- Set these environment variables in Render:
+  - `GOOGLE_API_KEY` (required)
+  - `PUBLIC_CHAT_API_KEY` (optional, to gate `/chat`)
+  - `ALLOWED_ORIGINS` (comma-separated origins for CORS, e.g., your Render URL)
+- After deploy, open your Render URL. Endpoints:
+  - `/` minimal chat UI
+  - `/chat` HTMX handler (POST)
+  - `/mock/status` mock API status
+  - `/healthz` application health
+
+
 ## Notes
 
 - Do not commit secrets; `.env` is gitignored.

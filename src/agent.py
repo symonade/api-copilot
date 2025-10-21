@@ -7,6 +7,7 @@ from typing import Any, Dict, List, Optional, TypedDict
 
 from dotenv import load_dotenv
 from pathlib import Path
+import logging
 
 # --- Load environment ---------------------------------------------------------
 # .env is one level up from /src
@@ -30,6 +31,14 @@ def _print_features_banner():
         pass
 
 _print_features_banner()
+
+# --- Reduce noisy logs in production -----------------------------------------
+if os.getenv("ENV", "dev").lower() == "prod":
+    try:
+        logging.getLogger("grpc").setLevel(logging.WARN)
+        logging.getLogger("absl").setLevel(logging.WARN)
+    except Exception:
+        pass
 
 API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000").strip()
 print(f"API_BASE_URL resolved at startup: {API_BASE_URL}")

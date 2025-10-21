@@ -572,3 +572,383 @@ asyncio.exceptions.CancelledError
 INFO:     Started server process [3692]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'src\agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [3692]
+WARNING:  WatchFiles detected changes in 'src\web_app.py'. Reloading...
+INFO:     Started server process [8136]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:    Traceback (most recent call last):
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 720, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 194, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\opeye\api-copilot\venv\Lib\site-packages\starlette\routing.py", line 701, in lifespan
+    await receive()
+  File "C:\Users\opeye\api-copilot\venv\Lib\site-packages\uvicorn\lifespan\on.py", line 137, in receive
+    return await self.receive_queue.get()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\queues.py", line 186, in get
+    await getter
+asyncio.exceptions.CancelledError
+
+INFO:     Started server process [23904]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'venv\Lib\site-packages\python_multipart\__init__.py', 'venv\Lib\site-packages\python_multipart\multipart.py', 'venv\Lib\site-packages\multipart\multipart.py', 'venv\Lib\site-packages\multipart\decoders.py', 'venv\Lib\site-packages\python_multipart\decoders.py', 'venv\Lib\site-packages\python_multipart\exceptions.py', 'venv\Lib\site-packages\multipart\exceptions.py', 'venv\Lib\site-packages\multipart\__init__.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [23904]
+WARNING:  WatchFiles detected changes in 'venv\Lib\site-packages\~astapi\security\open_id_connect_url.py', 'venv\Lib\site-packages\fastapi\openapi\utils.py', 'venv\Lib\site-packages\fastapi\security\oauth2.py', 'venv\Lib\site-packages\fastapi\openapi\constants.py', 'venv\Lib\site-packages\~astapi\utils.py', 'venv\Lib\site-packages\fastapi\utils.py', 'venv\Lib\site-packages\~astapi\websockets.py', 'venv\Lib\site-packages\~astapi\_compat\main.py', 'venv\Lib\site-packages\fastapi\security\__init__.py', 'venv\Lib\site-packages\fastapi\temp_pydantic_v1_params.py', 'venv\Lib\site-packages\fastapi\responses.py', 'venv\Lib\site-packages\~astapi\security\api_key.py', 'venv\Lib\site-packages\~astapi\security\__init__.py', 'venv\Lib\site-packages\fastapi\concurrency.py', 'venv\Lib\site-packages\fastapi\testclient.py', 'venv\Lib\site-packages\~astapi\middleware\gzip.py', 'venv\Lib\site-packages\~astapi\exception_handlers.py', 'venv\Lib\site-packages\fastapi\dependencies\models.py', 'venv\Lib\site-packages\~astapi\responses.py', 'venv\Lib\site-packages\fastapi\_compat\__init__.py', 'venv\Lib\site-packages\fastapi\requests.py', 'venv\Lib\site-packages\~astapi\openapi\docs.py', 'venv\Lib\site-packages\fastapi\middleware\__init__.py', 'venv\Lib\site-packages\~astapi\security\base.py', 'venv\Lib\site-packages\fastapi\__main__.py', 'venv\Lib\site-packages\fastapi\cli.py', 'venv\Lib\site-packages\fastapi\exception_handlers.py', 'venv\Lib\site-packages\~astapi\openapi\constants.py', 'venv\Lib\site-packages\~astapi\dependencies\utils.py', 'venv\Lib\site-packages\~astapi\dependencies\models.py', 'venv\Lib\site-packages\fastapi\exceptions.py', 'venv\Lib\site-packages\~astapi\_compat\model_field.py', 'venv\Lib\site-packages\~astapi\security\oauth2.py', 'venv\Lib\site-packages\~astapi\applications.py', 'venv\Lib\site-packages\~astapi\testclient.py', 'venv\Lib\site-packages\~astapi\middleware\wsgi.py', 'venv\Lib\site-packages\~astapi\encoders.py', 'venv\Lib\site-packages\~astapi\background.py', 'venv\Lib\site-packages\~astapi\openapi\utils.py', 'venv\Lib\site-packages\fastapi\security\base.py', 'venv\Lib\site-packages\~astapi\_compat\v2.py', 'venv\Lib\site-packages\~astapi\cli.py', 'venv\Lib\site-packages\~astapi\temp_pydantic_v1_params.py', 'venv\Lib\site-packages\~astapi\logger.py', 'venv\Lib\site-packages\~astapi\_compat\shared.py', 'venv\Lib\site-packages\fastapi\staticfiles.py', 'venv\Lib\site-packages\~astapi\_compat\__init__.py', 'venv\Lib\site-packages\fastapi\datastructures.py', 'venv\Lib\site-packages\~astapi\openapi\__init__.py', 'venv\Lib\site-packages\~astapi\templating.py', 'venv\Lib\site-packages\~astapi\datastructures.py', 'venv\Lib\site-packages\~astapi\openapi\models.py', 'venv\Lib\site-packages\~astapi\concurrency.py', 'venv\Lib\site-packages\~astapi\__init__.py', 'venv\Lib\site-packages\fastapi\middleware\trustedhost.py', 'venv\Lib\site-packages\~astapi\middleware\trustedhost.py', 'venv\Lib\site-packages\~astapi\middleware\cors.py', 'venv\Lib\site-packages\~astapi\params.py', 'venv\Lib\site-packages\fastapi\templating.py', 'venv\Lib\site-packages\fastapi\encoders.py', 'venv\Lib\site-packages\fastapi\routing.py', 'venv\Lib\site-packages\~astapi\dependencies\__init__.py', 'venv\Lib\site-packages\fastapi\middleware\cors.py', 'venv\Lib\site-packages\fastapi\middleware\httpsredirect.py', 'venv\Lib\site-packages\~astapi\security\utils.py', 'venv\Lib\site-packages\fastapi\logger.py', 'venv\Lib\site-packages\fastapi\security\api_key.py', 'venv\Lib\site-packages\~astapi\middleware\asyncexitstack.py', 'venv\Lib\site-packages\fastapi\_compat\main.py', 'venv\Lib\site-packages\~astapi\staticfiles.py', 'venv\Lib\site-packages\~astapi\__main__.py', 'venv\Lib\site-packages\~astapi\_compat\v1.py', 'venv\Lib\site-packages\fastapi\_compat\v1.py', 'venv\Lib\site-packages\fastapi\middleware\gzip.py', 'venv\Lib\site-packages\fastapi\background.py', 'venv\Lib\site-packages\~astapi\middleware\__init__.py', 'venv\Lib\site-packages\fastapi\_compat\model_field.py', 'venv\Lib\site-packages\fastapi\openapi\docs.py', 'venv\Lib\site-packages\fastapi\openapi\models.py', 'venv\Lib\site-packages\~astapi\security\http.py', 'venv\Lib\site-packages\fastapi\_compat\may_v1.py', 'venv\Lib\site-packages\~astapi\requests.py', 'venv\Lib\site-packages\~astapi\exceptions.py', 'venv\Lib\site-packages\fastapi\security\http.py', 'venv\Lib\site-packages\~astapi\routing.py', 'venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py', 'venv\Lib\site-packages\~astapi\middleware\httpsredirect.py', 'venv\Lib\site-packages\fastapi\_compat\shared.py', 'venv\Lib\site-packages\fastapi\security\open_id_connect_url.py', 'venv\Lib\site-packages\fastapi\_compat\v2.py', 'venv\Lib\site-packages\fastapi\middleware\wsgi.py', 'venv\Lib\site-packages\fastapi\param_functions.py', 'venv\Lib\site-packages\fastapi\security\utils.py', 'venv\Lib\site-packages\~astapi\types.py', 'venv\Lib\site-packages\fastapi\applications.py', 'venv\Lib\site-packages\fastapi\dependencies\__init__.py', 'venv\Lib\site-packages\~astapi\param_functions.py', 'venv\Lib\site-packages\fastapi\openapi\__init__.py', 'venv\Lib\site-packages\fastapi\params.py', 'venv\Lib\site-packages\fastapi\types.py', 'venv\Lib\site-packages\fastapi\__init__.py', 'venv\Lib\site-packages\fastapi\websockets.py', 'venv\Lib\site-packages\fastapi\dependencies\utils.py'. Reloading...
+INFO:     Started server process [10068]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:    Traceback (most recent call last):
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 720, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 194, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\opeye\api-copilot\venv\Lib\site-packages\starlette\routing.py", line 701, in lifespan
+    await receive()
+  File "C:\Users\opeye\api-copilot\venv\Lib\site-packages\uvicorn\lifespan\on.py", line 137, in receive
+    return await self.receive_queue.get()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\queues.py", line 186, in get
+    await getter
+asyncio.exceptions.CancelledError
+
+INFO:     Started server process [9876]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'src\web_app.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [9876]
+WARNING:  WatchFiles detected changes in 'src\agent.py', 'src\web_app.py', 'tests\test_web_basic.py'. Reloading...
+INFO:     Started server process [14008]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:    Traceback (most recent call last):
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 720, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 194, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\opeye\api-copilot\venv\Lib\site-packages\starlette\routing.py", line 701, in lifespan
+    await receive()
+  File "C:\Users\opeye\api-copilot\venv\Lib\site-packages\uvicorn\lifespan\on.py", line 137, in receive
+    return await self.receive_queue.get()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\queues.py", line 186, in get
+    await getter
+asyncio.exceptions.CancelledError
+
+INFO:     Started server process [3176]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'src\utils\transcript.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [3176]
+WARNING:  WatchFiles detected changes in 'src\session_store.py'. Reloading...
+INFO:     Started server process [2580]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:    Traceback (most recent call last):
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 720, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 194, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\opeye\api-copilot\venv\Lib\site-packages\starlette\routing.py", line 701, in lifespan
+    await receive()
+  File "C:\Users\opeye\api-copilot\venv\Lib\site-packages\uvicorn\lifespan\on.py", line 137, in receive
+    return await self.receive_queue.get()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\queues.py", line 186, in get
+    await getter
+asyncio.exceptions.CancelledError
+
+INFO:     Started server process [27904]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'src\link_token.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [27904]
+WARNING:  WatchFiles detected changes in 'tests\test_permalink.py', 'tests\test_chat_sessions.py', 'src\web_app.py'. Reloading...
+INFO:     Started server process [21396]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:    Traceback (most recent call last):
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 720, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 194, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\opeye\api-copilot\venv\Lib\site-packages\starlette\routing.py", line 701, in lifespan
+    await receive()
+  File "C:\Users\opeye\api-copilot\venv\Lib\site-packages\uvicorn\lifespan\on.py", line 137, in receive
+    return await self.receive_queue.get()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\queues.py", line 186, in get
+    await getter
+asyncio.exceptions.CancelledError
+
+INFO:     Started server process [27324]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'src\web_app.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [27324]
+WARNING:  WatchFiles detected changes in 'tests\test_web_basic.py'. Reloading...
+INFO:     Started server process [2580]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:    Traceback (most recent call last):
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 720, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 194, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\opeye\api-copilot\venv\Lib\site-packages\starlette\routing.py", line 701, in lifespan
+    await receive()
+  File "C:\Users\opeye\api-copilot\venv\Lib\site-packages\uvicorn\lifespan\on.py", line 137, in receive
+    return await self.receive_queue.get()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\queues.py", line 186, in get
+    await getter
+asyncio.exceptions.CancelledError
+
+INFO:     Started server process [27796]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'src\analytics.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [27796]
+WARNING:  WatchFiles detected changes in 'src\security.py'. Reloading...
+INFO:     Started server process [21144]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:    Traceback (most recent call last):
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 720, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 194, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\opeye\api-copilot\venv\Lib\site-packages\starlette\routing.py", line 701, in lifespan
+    await receive()
+  File "C:\Users\opeye\api-copilot\venv\Lib\site-packages\uvicorn\lifespan\on.py", line 137, in receive
+    return await self.receive_queue.get()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\queues.py", line 186, in get
+    await getter
+asyncio.exceptions.CancelledError
+
+INFO:     Started server process [21432]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'src\web_app.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [21432]
+WARNING:  WatchFiles detected changes in 'tests\test_admin.py', 'src\web_app.py'. Reloading...
+INFO:     Started server process [19956]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:    Traceback (most recent call last):
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 720, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 194, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\opeye\api-copilot\venv\Lib\site-packages\starlette\routing.py", line 701, in lifespan
+    await receive()
+  File "C:\Users\opeye\api-copilot\venv\Lib\site-packages\uvicorn\lifespan\on.py", line 137, in receive
+    return await self.receive_queue.get()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\queues.py", line 186, in get
+    await getter
+asyncio.exceptions.CancelledError
+
+WARNING:  WatchFiles detected changes in 'src\web_app.py'. Reloading...
+INFO:     Started server process [31208]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:    Traceback (most recent call last):
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 720, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 194, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\opeye\api-copilot\venv\Lib\site-packages\starlette\routing.py", line 701, in lifespan
+    await receive()
+  File "C:\Users\opeye\api-copilot\venv\Lib\site-packages\uvicorn\lifespan\on.py", line 137, in receive
+    return await self.receive_queue.get()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\opeye\AppData\Local\Programs\Python\Python313\Lib\asyncio\queues.py", line 186, in get
+    await getter
+asyncio.exceptions.CancelledError
+
+INFO:     Started server process [11408]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'src\web_app.py'. Reloading...

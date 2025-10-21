@@ -76,3 +76,82 @@ INFO:     127.0.0.1:55773 - "POST /projects/proj_2115/cost-items HTTP/1.1" 200 O
 INFO:     127.0.0.1:55775 - "POST /projects/proj_2115/cost-items HTTP/1.1" 200 OK
 INFO:     127.0.0.1:53400 - "GET /features HTTP/1.1" 200 OK
   INFO:     127.0.0.1:61949 - "GET /features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58517 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:58519 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52971 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52973 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:52975 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52978 - "POST /projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52980 - "POST /projects/proj_6531/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52982 - "POST /projects/proj_6531/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52986 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:52988 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52996 - "POST /projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52998 - "POST /projects/proj_1011/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53000 - "POST /projects/proj_1011/cost-items HTTP/1.1" 200 OK
+     INFO:     127.0.0.1:62272 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:62274 - "GET /status HTTP/1.1" 200 OK
+ INFO:     127.0.0.1:62281 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62283 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:62285 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62288 - "POST /projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62290 - "POST /projects/proj_4400/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62292 - "POST /projects/proj_4400/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62300 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:62302 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62310 - "POST /projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62312 - "POST /projects/proj_4752/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62314 - "POST /projects/proj_4752/cost-items HTTP/1.1" 200 OK
+   INFO:     127.0.0.1:50904 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:50906 - "GET /status HTTP/1.1" 200 OK
+ INFO:     127.0.0.1:57570 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57572 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:57574 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57577 - "POST /projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57579 - "POST /projects/proj_6699/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57581 - "POST /projects/proj_6699/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57589 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:57591 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57599 - "POST /projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57601 - "POST /projects/proj_2321/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57603 - "POST /projects/proj_2321/cost-items HTTP/1.1" 200 OK
+ INFO:     127.0.0.1:57658 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:57660 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57663 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57665 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:57667 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57670 - "POST /projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57672 - "POST /projects/proj_4102/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57674 - "POST /projects/proj_4102/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57678 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:57680 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57695 - "POST /projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57697 - "POST /projects/proj_2948/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57699 - "POST /projects/proj_2948/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62813 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:62816 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62819 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57921 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:64487 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59048 - "POST /projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59050 - "POST /projects/proj_4948/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59052 - "POST /projects/proj_4948/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59056 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:59058 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59066 - "POST /projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59068 - "POST /projects/proj_2671/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59071 - "POST /projects/proj_2671/cost-items HTTP/1.1" 200 OK
+      INFO:     127.0.0.1:49377 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:49379 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49382 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49384 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:49386 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49389 - "POST /projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49391 - "POST /projects/proj_6211/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49394 - "POST /projects/proj_6211/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49398 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:49401 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49677 - "POST /projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49679 - "POST /projects/proj_7262/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49681 - "POST /projects/proj_7262/cost-items HTTP/1.1" 200 OK
+ 

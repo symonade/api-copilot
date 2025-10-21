@@ -1,6 +1,6 @@
 import json
 import os
-from datetime import datetime
+from datetime import datetime, UTC
 from typing import Any, Dict, List
 
 
@@ -13,7 +13,7 @@ def _ensure_runs_dir(path: str) -> None:
 def save_transcript_json(session_state: List[Dict[str, Any]], config: Dict[str, Any], path: str) -> None:
     _ensure_runs_dir(path)
     payload = {
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.now(UTC).isoformat(),
         "config": config,
         "turns": session_state,
     }
@@ -24,7 +24,7 @@ def save_transcript_json(session_state: List[Dict[str, Any]], config: Dict[str, 
 def save_transcript_md(session_state: List[Dict[str, Any]], config: Dict[str, Any], path: str) -> None:
     _ensure_runs_dir(path)
     lines: List[str] = []
-    lines.append(f"# API Copilot Transcript ({datetime.utcnow().isoformat()}Z)")
+    lines.append(f"# API Copilot Transcript ({datetime.now(UTC).isoformat()})")
     lines.append("")
     if config:
         lines.append("## Config")
@@ -41,4 +41,3 @@ def save_transcript_md(session_state: List[Dict[str, Any]], config: Dict[str, An
         lines.append("")
     with open(path, "w", encoding="utf-8") as f:
         f.write("\n".join(lines))
-

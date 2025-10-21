@@ -20,4 +20,7 @@ services:
         value: "https://api-copilot-demo.onrender.com/mock2"
       - key: APP_OWNER
         value: "Platform Engineering"
-
+      - key: ALLOWED_ORIGINS
+        value: "https://api-copilot-demo.onrender.com"
+      - key: PUBLIC_CHAT_API_KEY
+        sync: false
