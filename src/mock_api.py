@@ -7,7 +7,7 @@ import time
 import random
 
 app = FastAPI(title="ConTech Mock API")
-
+\nfrom src.ui.features import router as features_router\napp.include_router(features_router)\n
 # --- Config knobs for demos ---
 FORCE_503 = os.getenv("MOCK_FORCE_503", "false").lower() == "true"
 ARTIFICIAL_LATENCY_MS = int(os.getenv("MOCK_LATENCY_MS", "0"))
@@ -92,3 +92,4 @@ def add_cost_items(
     if not payload or not payload.items:
         raise HTTPException(status_code=400, detail="No items provided")
     return AddCostItemsResponse(project_id=projectId, added_count=len(payload.items))
+

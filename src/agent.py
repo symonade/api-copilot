@@ -6,11 +6,30 @@ import re
 from typing import Any, Dict, List, Optional, TypedDict
 
 from dotenv import load_dotenv
+from pathlib import Path
 
 # --- Load environment ---------------------------------------------------------
 # .env is one level up from /src
 dotenv_path = os.path.join(os.path.dirname(__file__), "..", ".env")
 load_dotenv(dotenv_path=dotenv_path)
+
+# --- CLI features banner (env-gated) -----------------------------------------
+def _print_features_banner():
+    if os.getenv("SHOW_FEATURES", "0") != "1":
+        return
+    try:
+        rp = Path(__file__).resolve().parents[1] / "product" / "roadmap.json"
+        data = json.loads(rp.read_text(encoding="utf-8"))
+        bullets = [f"- {i['title']}" for i in data.get("next", [])[:3]]
+        if bullets:
+            print("\n=== Features Coming Soon ===")
+            for b in bullets:
+                print(b)
+            print("===========================\n")
+    except Exception:
+        pass
+
+_print_features_banner()
 
 API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000").strip()
 print(f"API_BASE_URL resolved at startup: {API_BASE_URL}")

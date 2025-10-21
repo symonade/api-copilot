@@ -1,0 +1,14 @@
+{
+  "version": "0.9.0",
+  "updated": "2025-10-20",
+  "next": [
+    {"title": "Multi-API query fan-out", "desc": "Query both ConTech and Scheduler, merge answers with source attributions."},
+    {"title": "Playbook answers", "desc": "One-click, opinionated fixes for common errors (401/403/422/503)."},
+    {"title": "Agent run exports", "desc": "Export a run as Markdown with steps, prompts, tool calls and outputs."}
+  ],
+  "later": [
+    {"title": "Slack app handoff", "desc": "Send a summarized answer and links to a Slack channel."},
+    {"title": "Cost anomaly flags", "desc": "Detect outliers in cost items before POST."}
+  ]
+}
+

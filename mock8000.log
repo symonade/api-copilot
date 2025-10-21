@@ -36,4 +36,13 @@ INFO:     127.0.0.1:63855 - "POST /projects/proj_7282/cost-items HTTP/1.1" 200 O
 INFO:     127.0.0.1:63857 - "POST /projects/proj_7282/cost-items HTTP/1.1" 200 OK
 INFO:     127.0.0.1:63865 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
 INFO:     127.0.0.1:63867 - "GET /status HTTP/1.1" 200 OK
- 
+  INFO:     127.0.0.1:65531 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:63148 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63154 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:63156 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63158 - "POST /projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63161 - "POST /projects/proj_5028/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63163 - "POST /projects/proj_5028/cost-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63165 - "HEAD /status HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:52525 - "GET /status HTTP/1.1" 200 OK
+   

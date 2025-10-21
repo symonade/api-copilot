@@ -36,6 +36,18 @@ Summary includes:
   - `python -u -m src.agent`
 - Files used: `src/agent.py:1`, `src/tools.py:1`, `.env:1`
 
+## Features Coming Soon (UI)
+
+- Streamlit panel (right-side expander, cards):
+  - `streamlit run streamlit_app.py`
+- FastAPI page (served by mock API):
+  - Start API: `python -m uvicorn src.mock_api:app --reload --port 8000`
+  - Visit: `http://localhost:8000/features`
+- CLI banner (env-gated):
+  - In PowerShell: `$env:SHOW_FEATURES="1"; python -u -m src.agent`
+  - In bash: `export SHOW_FEATURES=1 && python -u -m src.agent`
+  - Set to `0` (or unset) to keep banner off.
+
 ## Notes
 
 - Do not commit secrets; `.env` is gitignored.
