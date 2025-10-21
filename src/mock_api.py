@@ -7,7 +7,10 @@ import time
 import random
 
 app = FastAPI(title="ConTech Mock API")
-\nfrom src.ui.features import router as features_router\napp.include_router(features_router)\n
+
+# Features Coming Soon page (FastAPI router)
+from src.ui.features import router as features_router
+app.include_router(features_router)
 # --- Config knobs for demos ---
 FORCE_503 = os.getenv("MOCK_FORCE_503", "false").lower() == "true"
 ARTIFICIAL_LATENCY_MS = int(os.getenv("MOCK_LATENCY_MS", "0"))
